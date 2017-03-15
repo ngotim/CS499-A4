@@ -26,7 +26,7 @@ var healthCheck = function () {
 var uploadToElastic = function (items) {
     for (var i = 0; i < items.length; ++i) {
         client.create({
-            index: 'cs',
+            index: 'universal',
             type: 'waitTime',
             id: uuid(),
             body: items[i]
@@ -47,11 +47,13 @@ function fetchWaitingtimes() {
                 var items = result.rss.channel[0].item;
                 for (var i = 0; i < items.length; ++i) {
                     var ride = JSON.stringify(items[i].description[0]);
-                    if (items[i].title[0] !== 'Last updated' && ride.match(/[APap][mM]/)) {
+
+                    //if (items[i].title[0] !== 'Last updated' && ride.match(/[APap][mM]/)) {
+                    if(ride.indexOf('min') > -1){
                         upload.push({
                             'time': Date.now(),
                             'title': items[i].title[0],
-                            'waittime': items[i].description[0]
+                            'waittime': parseInt(ride.match(/\d/g).join(""))
                         });
                     }
                 }
@@ -73,3 +75,6 @@ var healthTimer = function () {
         healthCheck();
     }, wait)
 };
+
+waitTimer();
+healthTimer();
