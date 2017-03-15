@@ -65,15 +65,17 @@ function fetchWaitingtimes() {
 
 var wait = 600000 // Every 10 mins
 var waitTimer = function () {
+    console.log('Waiting 10 mins before fetching wait times.')
     setInterval(function () {
         fetchWaitingtimes();
     }, wait)
 };
 
 var healthTimer = function () {
+    console.log('Waiting 11 mins before performing health check.')
     setInterval(function () {
         healthCheck();
-    }, wait)
+    }, wait + 60000)
 };
 
 waitTimer();
